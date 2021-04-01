@@ -1,5 +1,7 @@
 <template>
-	home-album
+	<view class="home-album">
+		专辑
+	</view>
 </template>
 
 <script>

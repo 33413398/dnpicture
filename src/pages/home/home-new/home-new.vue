@@ -1,5 +1,7 @@
 <template>
-	home-new
+	<view class="home-new">
+		最新
+	</view>
 </template>
 
 <script>

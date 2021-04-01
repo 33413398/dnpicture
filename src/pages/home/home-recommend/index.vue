@@ -1,5 +1,7 @@
 <template>
-	home-recommend
+	<view class="home-recommend">
+		推荐
+	</view>
 </template>
 
 <script>
