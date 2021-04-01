@@ -1,6 +1,7 @@
 <template>
 	<view class="content">
 		<image class="logo" src="/static/logo.png"></image>
+		<u-button type="primary">主要按钮</u-button>
 		<view>
 			<text class="title">{{title}}</text>
 		</view>
@@ -11,8 +12,8 @@
 	export default {
 		data() {
 			return {
-				title: 'Hello'
-			}
+				title: 'Hello',
+		}
 		},
 		onLoad() {
 
