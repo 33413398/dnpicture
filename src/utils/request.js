@@ -9,7 +9,7 @@ export default (params)=>{
 		wx.request({
 			...params,
 			success(res) {
-				resolve(res.data)
+				resolve(res.data.res)
 			},
 			fail(res) {
 				reject(res)
