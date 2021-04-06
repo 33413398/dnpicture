@@ -1,19 +1,4 @@
-# hmdnpicture
-
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+# 懂你找图微信小程序(uniapp版本)
+## 一款用来搜索图片，播放视频的微信小程序
+### 使用了uniapp来进行集成开发，封装了微信请求接口，使用了uView UI组件库
+##### 项目开始于2021年3月31日
