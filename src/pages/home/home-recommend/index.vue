@@ -2,9 +2,9 @@
 	<scroll-view scroll-y @scrolltolower="handleToLower" class="home-recommend" v-if="dateFlag">
 		<!-- 推荐区域 -->
 		<view class="recommend">
-			<view class="item" v-for="item in recommendList" :key="item.id">
+			<navigator :url="`/pages/album/index?id=${item.id}`" class="item" v-for="item in recommendList" :key="item.id">
 				<image :src="item.thumb" mode="widthFix"></image>
-			</view>
+			</navigator>
 		</view>
 		<!-- 月份区域 -->
 		<view class="month">
@@ -75,7 +75,8 @@
 		methods: {
 			getList() {
 				this.request({
-					url: "http://157.122.54.189:9088/image/v3/homepage/vertical",
+					// url: "http://157.122.54.189:9088/image/v3/homepage/vertical",
+					url: "http://service.picasso.adesk.com/v3/homepage/vertical",
 					data: this.prams
 				}).then((res) => {
 					if(res.vertical.length===0) {
@@ -95,9 +96,17 @@
 				})
 			},
 			handleToLower() {
-				if(hasMore) {
+				if(this.hasMore) {
 					this.prams.skip = this.prams.limit + this.prams.skip
 					this.getList()
+				}else {
+					// 消息提醒
+					uni.showToast({
+						title:"宝，没有数据了哦，请不要再下拉了",
+						icon:"none" // 有图标加图标，没有得写none否则报错
+					})
+					// 终止，防止执行下方代码
+					return;
 				}
 			}
 		}
