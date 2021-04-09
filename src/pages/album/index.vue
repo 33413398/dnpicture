@@ -4,7 +4,7 @@
 			<image :src="album.cover" mode="aspectFill"></image>
 			<view class="album-info">
 				<view class="album-name">
-					{{album.name}}
+					{{album.name||'数据暂无'}}
 				</view>
 				<view class="album-btn">
 					关注专辑
@@ -14,21 +14,21 @@
 		<view class="album-author">
 			<view class="author-top">
 				<view class="author-img">
-					<image :src="album.user.avatar" mode=""></image>
+					<image :src="album.user.avatar" mode="widthFix" alt="图片暂无"></image>
 				</view>
 				<view class="author-name">
-					{{album.user.name}}
+					{{album.user.name||'数据暂无'}}
 				</view>
 			</view>
 			<view class="author-bottom">
-				<text>{{album.user.desc}}</text>
+				<text>{{album.desc}}</text>
 			</view>
 		</view>
-		<!-- <view class="album-list">
-			<view class="album-item">
-				<image src="" mode=""></image>
+		<view class="album-list">
+			<view class="album-item" v-for="item in wallpaper" :key="item.id">
+				<image :src="item.thumb+item.rule.replace('$<Height>',360)" mode="aspectFill"></image>
 			</view>
-		</view> -->
+		</view>
 	</view>
 </template>
 
@@ -49,6 +49,10 @@
 				wallpaper: [],
 				// 数据回来再展示防止闪动
 				isDate: false,
+				// 是否第一次请求
+				isFirstRequest: true,
+				// 是否有更多数据
+				hasMore: true
 			}
 		},
 		onLoad(option) {
@@ -59,29 +63,37 @@
 		updated() {
 
 		},
+		onReachBottom() {
+			if (this.hasMore) {
+				this.prams.skip += this.prams.limit
+				this.getAlbumList()
+			} else {
+				uni.showToast({
+					title: '没有更多数据了！！',
+					icon: 'none'
+				})
+				return;
+			}
+		},
 		methods: {
-			/* 
-			备用接口
-			推荐: http://service.picasso.adesk.com/v3/homepage/vertical
-			专辑 http://service.picasso.adesk.com/v1/wallpaper/album
-			分类: http://service.picasso.adesk.com/v1/vertical/category
-			分类-最新-热门 http://service.picasso.adesk.com/v1/vertical/category/${id}/vertical
-			专辑 http://service.picasso.adesk.com/v1/wallpaper/album
-			专辑-详情 http://service.picasso.adesk.com/v1/wallpaper/album/${id}/wallpaper
-			图片评论 http://service.picasso.adesk.com/v2/wallpaper/wallpaper/${id}/comment
-			接口文档地址：https://www.showdoc.cc/414855720281749?page_id=3680857125411215
-			 */
 			getAlbumList() {
 				this.request({
 					url: `http://service.picasso.adesk.com/v1/wallpaper/album/${this.id}/wallpaper`,
 					data: this.prams
 				}).then(res => {
-					this.album = res.album;
-					this.isDate = true
-					this.wallpaper = res.wallpaper
-					console.log(this.album);
+					if (this.isFirstRequest) {
+						this.album = res.album;
+						this.prams.first = 0
+						this.isDate = true
+						this.isFirstRequest = false
+					}
+					if (res.wallpaper.length === 0) {
+						this.hasMore = false
+					}
+					this.wallpaper = [...this.wallpaper, ...res.wallpaper]
 				})
-			}
+			},
+
 		}
 	}
 </script>
@@ -89,13 +101,76 @@
 <style lang="scss">
 	.album {
 		.album-bg {
+			position: relative;
+
 			image {}
+
+			.album-info {
+				position: absolute;
+				left: 0;
+				bottom: 0;
+				display: flex;
+				padding: 10rpx;
+				justify-content: space-between;
+				align-items: center;
+				height: 80rpx;
+				width: 100%;
+				color: #fff;
+
+				.album-name {
+					font-size: 40rpx;
+				}
+
+				.album-btn {
+					background-color: $color;
+					width: 152rpx;
+					height: 50rpx;
+					display: flex;
+					font-size: 24rpx;
+					justify-content: center;
+					align-items: center;
+					border-radius: 10rpx;
+				}
+			}
 		}
 
-		.album-info {
-			.album-name {}
+		.album-author {
+			.author-top {
+				padding: 10rpx;
+				display: flex;
 
-			.album-btn {}
+				.author-img {
+					padding: 10rpx 0;
+					width: 50rpx;
+
+					image {
+						width: 100%;
+					}
+				}
+
+				.author-name {
+					padding: 10rpx 0;
+					color: #000;
+					margin-left: 15rpx;
+				}
+			}
+
+			.author-bottom {
+				color: #7F7F7D;
+				font-size: 24rpx;
+				padding: 0 10rpx;
+			}
+		}
+
+		.album-list {
+			display: flex;
+			flex-wrap: wrap;
+			margin-top: 10rpx;
+
+			.album-item {
+				width: ceil(750rpx / 3);
+				border: 3rpx solid #fff;
+			}
 		}
 	}
 </style>
