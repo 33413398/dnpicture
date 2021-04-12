@@ -40,7 +40,8 @@
 				albumList: [],
 				hasMore: true,
 				// 页面是否已有数据
-				isDateList:false
+				isDateList: false,
+				hasMore: true
 			}
 		},
 		mounted() {
@@ -52,16 +53,19 @@
 		methods: {
 			getAlbumList() {
 				this.request({
-					url: 'http://service.picasso.adesk.com/v1/wallpaper/album',
-					// url:'http://157.122.54.189:9088/image/v1/wallpaper/album',
+					// url: 'http://service.picasso.adesk.com/v1/wallpaper/album',
+					url: 'http://157.122.54.189:9088/image/v1/wallpaper/album',
 					data: this.prams
 				}).then((res) => {
 					if (this.bannerList.length === 0) {
 						this.bannerList = res.banner
 						this.isDateList = true
 					}
+					if (res.album.length === 0) {
+						this.hasMore = false
+					}
 					this.albumList = [...this.albumList, ...res.album]
-					
+
 				})
 			},
 			handleToLower() {
@@ -93,8 +97,10 @@
 				height: 100%;
 			}
 		}
+
 		.album {
 			padding: 10rpx;
+
 			.album-item {
 				display: flex;
 				padding: 10rpx 0;
