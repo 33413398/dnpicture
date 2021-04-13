@@ -2,7 +2,8 @@
 	<scroll-view scroll-y @scrolltolower="handleToLower" class="home-recommend" v-if="dateFlag">
 		<!-- 推荐区域 -->
 		<view class="recommend">
-			<navigator :url="`/pages/album/index?id=${item.id}`" class="item" v-for="item in recommendList" :key="item.id">
+			<navigator :url="`/pages/album/index?id=${item.id}`" class="item" v-for="item in recommendList"
+				:key="item.id">
 				<image :src="item.thumb" mode="widthFix"></image>
 			</navigator>
 		</view>
@@ -19,8 +20,10 @@
 				</view>
 			</view>
 			<view class="month-content">
-				<view class="month-content-item" v-for="item in monthList" :key="item.id">
-					<image :src="item.thumb+item.rule.replace('$<Height>',360)" mode="aspectFill"></image>
+				<view class="month-content-item" v-for="(item,index) in monthList" :key="item.id">
+					<go-detail :list="monthList" :index="index">
+						<image :src="item.thumb+item.rule.replace('$<Height>',360)" mode="aspectFill"></image>
+					</go-detail>
 				</view>
 			</view>
 		</view>
@@ -31,8 +34,10 @@
 				<text class="hot-top-title">热门</text>
 			</view>
 			<view class="hot-content">
-				<view class="hot-content-item" v-for="item in hotList" :key="item.id">
-					<image :src="item.thumb" mode="aspectFill"></image>
+				<view class="hot-content-item" v-for="(item,index) in hotList" :key="item.id">
+					<go-detail :list="hotList" :index="index">
+						<image :src="item.thumb" mode="aspectFill"></image>
+					</go-detail>
 				</view>
 			</view>
 		</view>
@@ -41,7 +46,11 @@
 
 <script>
 	import moment from 'moment'
+	import goDetail from '../../../components/goDetail.vue'
 	export default {
+		components: {
+			goDetail
+		},
 		data() {
 			return {
 				// 推荐列表数据
@@ -65,11 +74,13 @@
 				// 请求回来才渲染防止空白
 				dateFlag: false,
 				// 判断还有没有更多分页数据
-				hasMore:true
+				hasMore: true
 			}
 		},
 		mounted() {
-			uni.setNavigationBarTitle({title:'推荐'})
+			uni.setNavigationBarTitle({
+				title: '推荐'
+			})
 			this.getList()
 		},
 		methods: {
@@ -79,9 +90,9 @@
 					// url: "http://service.picasso.adesk.com/v3/homepage/vertical",
 					data: this.prams
 				}).then((res) => {
-					if(res.vertical.length===0) {
+					if (res.vertical.length === 0) {
 						// 如果长度为0 表示没有分页数据了
-						this.hasMore=false
+						this.hasMore = false
 						return;
 					}
 					if (this.recommendList.length === 0 || this.monthList.length === 0) {
@@ -96,14 +107,14 @@
 				})
 			},
 			handleToLower() {
-				if(this.hasMore) {
+				if (this.hasMore) {
 					this.prams.skip = this.prams.limit + this.prams.skip
 					this.getList()
-				}else {
+				} else {
 					// 消息提醒
 					uni.showToast({
-						title:"宝，没有数据了哦，请不要再下拉了",
-						icon:"none" // 有图标加图标，没有得写none否则报错
+						title: "宝，没有数据了哦，请不要再下拉了",
+						icon: "none" // 有图标加图标，没有得写none否则报错
 					})
 					// 终止，防止执行下方代码
 					return;

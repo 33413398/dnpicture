@@ -14,7 +14,7 @@
 		<view class="album-author">
 			<view class="author-top">
 				<view class="author-img">
-					<image :src="album.user.avatar" mode="widthFix" alt="图片暂无"></image>
+					<image :src="album.user.avatar" mode="aspectFill" alt="图片暂无"></image>
 				</view>
 				<view class="author-name">
 					{{album.user.name||'数据暂无'}}
@@ -25,15 +25,21 @@
 			</view>
 		</view>
 		<view class="album-list">
-			<view class="album-item" v-for="item in wallpaper" :key="item.id">
-				<image :src="item.thumb+item.rule.replace('$<Height>',360)" mode="aspectFill"></image>
+			<view class="album-item" v-for="(item,index) in wallpaper" :key="item.id">
+				<go-detail :list="wallpaper" :index="index">
+					<image :src="item.thumb+item.rule.replace('$<Height>',360)" mode="aspectFill"></image>
+				</go-detail>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import goDetail from '../../components/goDetail.vue'
 	export default {
+		components: {
+			goDetail
+		},
 		data() {
 			return {
 				id: -1,
@@ -145,7 +151,7 @@
 					width: 50rpx;
 
 					image {
-						width: 100%;
+						height: 160rpx;
 					}
 				}
 
