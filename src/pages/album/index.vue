@@ -110,7 +110,9 @@
 		.album-bg {
 			position: relative;
 
-			image {}
+			image {
+			
+			}
 
 			.album-info {
 				position: absolute;
@@ -149,9 +151,8 @@
 				.author-img {
 					padding: 10rpx 0;
 					width: 50rpx;
-
 					image {
-						height: 160rpx;
+						height: 50rpx;
 					}
 				}
 
