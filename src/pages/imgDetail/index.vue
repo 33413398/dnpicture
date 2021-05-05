@@ -106,6 +106,12 @@
 			</view>
 		</view>
 		<!-- 评论区 最新 end -->
+		<!-- 下载图片区域 -->
+		<view class="down-img">
+			<view class="down-btn" @click="downImgHandle">
+				下载图片
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -172,12 +178,27 @@
 			},
 			// 获取当前信息
 			getCurrentInfo(){
-				console.log(this.currentIndex);
 				this.currentImgInfo = getApp().globalData.currentList[this.currentIndex]
 				// 由于是秒需要乘以1000 
 				this.time = moment(this.currentImgInfo.atime * 1000).fromNow()
 				this.getImgDetailList(this.currentImgInfo.id)
 				// this.getImgDetailList('5a13d879e7bce743777223e4')
+			},
+			// 下载图片
+			async downImgHandle(){
+				uni.showLoading({
+					title:'下载中'
+				})
+				let res = await uni.downloadFile({
+					url:this.currentImgInfo.img
+				})
+				let res2 = await uni.saveImageToPhotosAlbum({
+					filePath:res[1].tempFilePath
+				})
+				uni.hideLoading()
+				uni.showToast({
+					title:'下载成功'
+				})
 			}
 		}
 	}
@@ -324,6 +345,24 @@
 						}
 					}
 				}
+			}
+		}
+		.down-img {
+			height: 120rpx;
+			border-top: 2rpx solid #EDEDEC;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			.down-btn {
+				width: 98%;
+				height: 70%;
+				font-size: 36rpx;
+				color: #fff;
+				font-weight: 600;
+				background-color: $color;
+				display: flex;
+				justify-content: center;
+				align-items: center;
 			}
 		}
 	}
