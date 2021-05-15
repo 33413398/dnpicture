@@ -22,6 +22,12 @@
 			  }
 			},
 			{
+			  "path": "pages/category/index",
+			  "style": {
+			    "navigationBarTitleText": "图片分类"
+			  }
+			},
+			{
 			  "path": "pages/horizontal/index",
 			  "style": {
 			    "navigationBarTitleText": "横屏"
@@ -33,6 +39,12 @@
 		        "navigationBarTitleText": "精美视频"
 		      }
 		    },
+			{
+			  "path": "pages/videoPlay/index",
+			  "style": {
+			    "navigationBarTitleText": "视频详情"
+			  }
+			},
 			{
 			  "path": "pages/search/index",
 			  "style": {
